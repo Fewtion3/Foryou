@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>Our Memory</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;800&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Kanit', sans-serif; 
+      background: url('pic1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+      color: #880e4f;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 60px;
+      user-select: none;
+    }
+    
+
+    h1 {
+      font-weight: 800;
+      font-size: 3rem;
+      color: #FFFFFF;
+      margin-bottom: 15px;
+      text-shadow:
+        0 0 8px #f48fb1,
+        0 0 12px #f48fb1;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    p {
+      max-width: 650px;
+      font-weight: 600;
+      font-size: 1.3rem;
+      text-align: center;
+      padding: 0 25px;
+      line-height: 1.6;
+      color: #5e003d;
+      background: #ffe6f0cc;
+      border-radius: 20px;
+      box-shadow:
+        0 6px 15px rgba(216, 27, 96, 0.2);
+      margin-bottom: 60px;
+      user-select: text;
+      position: relative;
+      z-index: 10;
+      border: 2px solid #f8bbd0;
+    }
+
+    .menu {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 420px;
+      margin-bottom: 30px;
+      user-select: none;
+    }
+
+    .menu a {
+      position: absolute;
+      width: 220px;
+      height: 120px;
+      background: #fff;
+      border: 4px solid #f8bbd0;
+      color: #d81b60;
+      font-size: 22px;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 25px;
+      box-shadow:
+        0 8px 20px rgba(216, 27, 96, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .menu a:hover {
+      background-color: #ffd1e0;
+      transform: scale(1.08);
+      box-shadow:
+        0 15px 30px rgba(216, 27, 96, 0.5);
+    }
+
+    .top-left    { top: 10%; left: 10%; }
+    .top-right   { top: 10%; right: 10%; }
+    .bottom-left { bottom: 10%; left: 10%; }
+    .bottom-right{ bottom: 10%; right: 10%; }
+
+    /* Center Gift Button */
+    .gift-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 260px;
+      height: 140px;
+      background: linear-gradient(145deg, #f8bbd0, #fff);
+      border: 5px dashed #d81b60;
+      border-radius: 35px;
+      color: #d81b60;
+      font-size: 26px;
+      font-weight: 800;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 30px 4px #f48fb1aa,
+        0 12px 30px rgba(216, 27, 96, 0.3);
+      transition: all 0.3s ease;
+      animation: pulse 2.2s infinite;
+      cursor: pointer;
+      user-select: none;
+      z-index: 20;
+    }
+
+    .gift-center:hover {
+      background-color: #fff0f6;
+      transform: translate(-50%, -50%) scale(1.1);
+      box-shadow:
+        0 0 50px 8px #f48fb1ff,
+        0 18px 40px rgba(216, 27, 96, 0.5);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% {
+        text-shadow:
+          0 0 8px #f48fb1,
+          0 0 12px #f48fb1;
+      }
+      50% {
+        text-shadow:
+          0 0 15px #d81b60,
+          0 0 20px #d81b60;
+      }
+    }
+
+    /* Floating Hearts */
+    .heart {
+      position: fixed;
+      width: 15px;
+      height: 15px;
+      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center;
+      background-size: contain;
+      animation: floatUp linear infinite;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 0;
+      will-change: transform;
+    }
+
+    /* Different speeds for hearts */
+    .heart:nth-child(odd) {
+      animation-duration: 6s;
+    }
+    .heart:nth-child(even) {
+      animation-duration: 4.5s;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      p {
+        font-size: 1.1rem;
+        padding: 0 15px;
+      }
+      .menu {
+        max-width: 100%;
+        height: auto;
+        padding: 0 15px 30px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+      .menu a {
+        position: static !important;
+        width: 45%;
+        height: 110px;
+        font-size: 18px;
+        border-width: 3px;
+        border-radius: 20px;
+        box-shadow: 0 6px 15px rgba(216, 27, 96, 0.2);
+      }
+      .gift-center {
+        position: static !important;
+        width: 80%;
+        height: 120px;
+        font-size: 22px;
+        margin: 20px auto 0 auto;
+        animation: none;
+        border-width: 3px;
+        border-radius: 25px;
+        box-shadow: 0 6px 20px rgba(216, 27, 96, 0.25);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>สิ่งที่เค้ามอบให้เธอได้ในปีแรก 💖</h1>
+  <p>ขอบคุณที่อยู่ด้วยกันมาปีนึงเต็มๆเลยนะคะ เค้าอยากมีเธอต่อไปในทุกปีจะตามใจแบบนี้ดูและเธอตลอดไปเลยยรักเธอนะคะ แองจี้น่ารักที่สุดเลย</p>
+
+  <div class="menu" role="navigation" aria-label="เมนูหลัก">
+    <a href="story.html" class="top-left" aria-label="เรื่องราวของเรา">เรื่องราวของเรา</a>
+    <a href="gallery.html" class="top-right" aria-label="รูปภาพความทรงจำ">รูปภาพความทรงจำ</a>
+    <a href="letter.html" class="bottom-left" aria-label="จดหมายถึงคุณ">จดหมายถึงเธอ</a>
+    <a href="song.html" class="bottom-right" aria-label="เพลงสำหรับเธอ">เพลงสำหรับเธอ</a>
+    <a href="gift.html" class="gift-center" aria-label="เปิดของขวัญ">ของขวัญของเธอ🎁</a>
+  </div>
+
+  <!-- Floating hearts -->
+  <script>
+    const heartCount = 35;
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.top = Math.random() * 100 + "vh";
+      heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+      heart.style.animationDelay = (Math.random() * 6) + "s";
+      document.body.appendChild(heart);
+    }
+  </script>
+
+  <!-- Optional: Background soft music -->
+  <audio autoplay loop muted>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/21/audio_929799c20b.mp3?filename=lovely-love-ambient-11866.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+</body>
+</html>
