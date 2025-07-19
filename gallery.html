@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Memory Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Kanit', sans-serif;
+      background: url('pic2.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+      color: #880e4f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 15px 40px;
+      min-height: 100vh;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 30px;
+      padding: 12px 24px;
+      background-color: #ff69b4;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 10;
+      position: relative;
+    }
+
+    .back-button:hover {
+      background-color: #e91e63;
+      transform: scale(1.05);
+    }
+
+    .text-box {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 700px;
+      margin-bottom: 30px;
+      z-index: 2;
+    }
+
+    h1 {
+      color: #e91e63;
+      margin-bottom: 10px;
+      font-size: 2.2rem;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 0;
+      font-size: 1.05rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .gallery-item {
+  aspect-ratio: 4 / 3; /* หรือ 1 / 1 ถ้าอยากให้สี่เหลี่ยมจัตุรัส */
+  overflow: hidden;
+    }
+
+    .gallery-item img {
+     width: 100%;
+  height: 100%;
+  object-fit: cover; /* ครอบรูปให้พอดีไม่บิดเบี้ยว */
+  border-radius: 15px;
+  border: 4px solid white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .gallery-item img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .caption {
+      margin-top: 8px;
+      padding: 6px 10px;
+      background-color: rgba(255, 255, 255, 0.85); 
+      font-size: 0.95rem;
+      color: #333;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: inline-block;
+    }
+
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+      flex-direction: column;
+      padding: 10px;
+    }
+
+    .lightbox img {
+  width: auto;
+  max-width: 90vw;
+  height: auto;
+  max-height: 80vh;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  margin-bottom: 15px;
+    }
+
+    .lightbox-caption {
+      color: white;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff69b4;
+      transform: rotate(45deg);
+      animation: floatUp linear infinite;
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff69b4;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -10px; left: 0; }
+    .heart::after  { top: 0; left: -10px; }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) rotate(45deg) scale(0.5); opacity: 0; }
+      50%  { opacity: 0.7; }
+      100% { transform: translateY(-10vh) rotate(45deg) scale(1); opacity: 0; }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.6rem; }
+      .caption { font-size: 0.85rem; }
+    }
+
+    /* ปุ่มเล่นเพลง */
+    .play-music {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 999;
+      padding: 10px 20px;
+      background: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .play-music:hover {
+      background: #e91e63;
+    }
+  </style>
+</head>
+<body>
+  <a href="nextpage.html" class="back-button">← กลับ</a>
+
+  <div class="text-box">
+    <h1>ภาพที่มีเรื่องราวของเธอและเค้า</h1>
+    <p>รวมภาพที่มันมีความหมายต่อเค้ามากๆ</p>
+  </div>
+
+  <div class="gallery">
+    <div class="gallery-item">
+      <img src="IMG_20240615_164121 (1).jpg" alt="รูป 1" onclick="openLightbox(this.src, 'เจ้าจิ้งจก5555 จำได้มั้ยอันนี้เป็นภาพที่ใช้จีบเธอตอนแรกๆ น่ารักมากเลยนะสำหรับเค้า')">
+      <div class="caption">ภาพจิ้งจกของเค้าา</div>
+    </div>
+    <div class="gallery-item">
+      <img src="MyGF.JPG" alt="รูป 2" onclick="openLightbox(this.src, 'ภาพคู่ที่มองกล้องด้วยกันก่อนจะขอเป็นแฟนน')">
+      <div class="caption">ภาพคู่ที่มองกล้องด้วยกันก่อนจะขอเป็นแฟนน</div>
+    </div>
+    <div class="gallery-item">
+      <img src="bracelet.jpg" alt="รูป 3" onclick="openLightbox(this.src, 'อันนี้คือกำไลที่เค้าตั้งใจให้เธอตอนกำลังจีบกัน เค้ารู้สึกภูมิใจมากเพราะเธอชอบสีฟ้าเค้าก็เลยทำสีฟ้าให้ด้วยย')">
+      <div class="caption">กำไลเบนเทน</div>
+    </div>
+    <div class="gallery-item">
+      <img src="chat1.jpg" alt="รูป 4" onclick="openLightbox(this.src, 'ฝึกจีบเธอแล้วเธอก็บอกว่าเค้าน่ารักกกก')">
+      <div class="caption">ฝึกจีบแองจี้</div>
+    </div>
+    <div class="gallery-item">
+      <img src="chat2.jpg" alt="รูป 5" onclick="openLightbox(this.src, 'น่ารักากเลยยย แฟนเป็นห่วงเป็นใย ตอนนี้เค้ากินข้าวเย้อมากเลยนะะะ แฟนนนอ่ยคิดถึง')">
+      <div class="caption">ถ้าเค้าชอบเธอเค้าต้องทำตามนี้</div>
+    </div>
+        <div class="gallery-item">
+      <img src="chat3.jpg" alt="รูป 6" onclick="openLightbox(this.src, 'ตอนนั้นแทบโดดเต้นกลางรด.อ่ะเธอ โคตรฟีลกู้ดดด')">
+      <div class="caption">แฟนบ่นคิดถึง</div>
+    </div>
+        <div class="gallery-item">
+      <img src="pia.jpg" alt="รูป 7" onclick="openLightbox(this.src, 'เธอเค้าพึ่งเคยฝึกถักเปียครังแรกเลยนะะะ เค้าเก่งมั้ยยยย')">
+      <div class="caption">ฝึกถักเปียให้แฟน</div>
+    </div>
+        <div class="gallery-item">
+      <img src="sming.jpg" alt="รูป 8" onclick="openLightbox(this.src, 'สมิงเป็นของขวัญชิ้นแรกตั้งแต่เรายังไม่คบกันนู่นแล้วก็เป็นลูกของเรามาจนถึงทุกวันนี้')">
+      <div class="caption">สมิงผู้มาก่อนกาล</div>
+    </div>
+            <div class="gallery-item">
+      <img src="hat.png" alt="รูป 9" onclick="openLightbox(this.src, 'ตอนนั้นหวานมากกก พาทำอะไรเธอทำหมดเลยเค้ารักเธอนะคะ')">
+      <div class="caption">รูปหัวใจของเค้าและเธอ</div>
+    </div>
+            <div class="gallery-item">
+      <img src="IMG_0638.JPG" alt="รูป 10" onclick="openLightbox(this.src, 'รูปนี้คือรูปที่เค้าถ่ายเองก่อนที่เค้าจะขอเธอเป็นแฟน ตอนนั้นไม่รู้ว่าอ่อม เค้าเสียใจจจ')">
+      <div class="caption">รูปก่อนเป็นแฟนเธอ</div>
+    </div>
+            <div class="gallery-item">
+      <img src="IMG_20240915_204129.jpg" alt="รูป 11" onclick="openLightbox(this.src, 'เธอส่งอันนี้มาให้เค้าตอนนั้นเค้า รู้สึกใจละลายกับแฟนเลยทำให้เป็นแมวซะเลย น่ารักกก')">
+      <div class="caption">รูปธอตอนเป็นแมว</div>
+    </div>
+            <div class="gallery-item">
+      <img src="song.jpg" alt="รูป 12" onclick="openLightbox(this.src, 'เพลย์ลิสต์แรกที่เค้าสร้างให้ ในspotify เพราะเคยทำให้ในยูทูปมาก่อน ')">
+      <div class="caption">เพลย์ลิสต์แรก</div>
+    </div>
+            <div class="gallery-item">
+      <img src="image.png" alt="รูป 13" onclick="openLightbox(this.src, 'เป็นเดทแรกของเค้ากับเธอที่สุนีย์ ที่เราได้มาเจอกันสองคน แล้วเราได้ระบายสี เล่นนู่นนี่กัน สนุกมากๆเลยค่ะเธอ')">
+      <div class="caption">เดทแรกของเรา</div>
+    </div>
+            <div class="gallery-item">
+      <img src="with.png" alt="รูป 14" onclick="openLightbox(this.src, 'เป็นรูปที่เราวาดด้วยกันแรกๆ เค้าชอบพาแฟนวาด')">
+      <div class="caption">วาดรูป</div>
+    </div>
+            <div class="gallery-item">
+      <img src="123.jpg" alt="รูป 15" onclick="openLightbox(this.src, 'เค้าวาดสมิงกับด๊อกแด๊ก ในระบบดิจิตอล')">
+      <div class="caption">รูปสมิงแบบดิจิตอล</div>
+    </div>
+            <div class="gallery-item">
+      <img src="b.jpg" alt="รูป 16" onclick="openLightbox(this.src, 'เธอกับเค้าตอนเราตั้งใจเรียนด้วยกันเย่ๆ')">
+      <div class="caption">เธอกับเค้าตอนตั้งใจเรียน</div>
+    </div>
+            <div class="gallery-item">
+      <img src="HBD.jpg" alt="รูป 17" onclick="openLightbox(this.src, 'เค้าวาดให้เป็นของขวัญวันเกิดแฟน เค้าตั้งใจวาดทุกรูปเลยนะ สวยมั้ย')">
+      <div class="caption">วันเกิด</div>
+    </div>
+            <div class="gallery-item">
+      <img src="beau.jpg" alt="รูป 18" onclick="openLightbox(this.src, 'คนอะไรสวยจังเลยยย น่ารักที่สุดดด')">
+      <div class="caption">สวยจัง</div>
+    </div>
+            <div class="gallery-item">
+      <img src="image (1).png" alt="รูป 19" onclick="openLightbox(this.src, 'เธอกับเค้าที่เรามีหัวใจตอนนั่งด้วยกันวันนั้นแฟนใส่ชุดสวยมาก')">
+      <div class="caption">หัวใจบิน</div>
+    </div>
+            <div class="gallery-item">
+      <img src="image (2).png" alt="รูป 20" onclick="openLightbox(this.src, 'เธอจับมือเค้าระหว่างนอนหลับ มันน่ารักมากๆสำหรับเค้า เค้าดีใจที่มีเธอเป็นแฟนนะ')">
+      <div class="caption">จับมือ</div>
+    </div>
+                <div class="gallery-item">
+      <img src="IMG_20250220_111043 (1).jpg" alt="รูป 21" onclick="openLightbox(this.src, 'รูปตอนที่เธอกับเค้าปัจฉิมนิเทศด้วยกันมันน่ารักมากๆเลยใช่มั้ย')">
+      <div class="caption">ปัจฉิม</div>
+    </div>
+                <div class="gallery-item">
+      <img src="image (4).png" alt="รูป 22" onclick="openLightbox(this.src, 'แฟนเค้าเข้าเรียนมหาลัยโตเป็นสาวแล้ววว เค้าอยู่ในการเติบโตเธอช่วงนี้รู้สึกดีจริงๆ')">
+      <div class="caption">มหาลัย</div>
+    </div>
+                <div class="gallery-item">
+      <img src="image (3).png" alt="รูป 23" onclick="openLightbox(this.src, 'ภาพคู่ก่อนที่เค้ากับเธอจะไกลกัน จะรีบกลับไปหาไวๆเลยนะคะ')">
+      <div class="caption">ภาพคู่</div>
+    </div>
+                <div class="gallery-item">
+      <img src="test.png" alt="รูป 24" onclick="openLightbox(this.src, 'รักเธอที่สุดเลย')">
+      <div class="caption">สุขสันต์วันครบรอบนะคะ</div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Full View">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+
+  <!-- ปุ่มเล่นเพลง -->
+  <button class="play-music" onclick="playMusic()">♫ เล่นเพลง</button>
+
+  <!-- Player ซ่อน -->
+  <iframe id="ytplayer" width="0" height="0" style="display:none;" frameborder="0" allow="autoplay"></iframe>
+
+  <script>
+    function generateHearts() {
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+        heart.style.animationDelay = Math.random() * 3 + "s";
+        document.body.appendChild(heart);
+      }
+    }
+
+    generateHearts();
+
+    function openLightbox(src, caption) {
+      document.getElementById("lightbox-img").src = src;
+      document.getElementById("lightbox-caption").textContent = caption;
+      document.getElementById("lightbox").style.display = "flex";
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").style.display = "none";
+    }
+
+    function playMusic() {
+      const videoId = "Rj42_M8iAa9TPEBR"; // 🔁 แทนที่ตรงนี้ด้วย ID วิดีโอ YouTube ของคุณ
+      document.getElementById("ytplayer").src = 
+        `https://youtu.be/Olx_an6RwZE?si=Rj42_M8iAa9TPEBR`;
+    }
+  </script>
+</body>
+</html>
