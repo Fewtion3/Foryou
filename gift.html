@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Special Gift</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffe4e1, #fff0f5);
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h1 {
+      color: #d81b60;
+    }
+
+    .gift-box {
+      margin-top: 40px;
+      display: inline-block;
+      padding: 40px;
+      background: #fff;
+      border: 3px dashed #e91e63;
+      border-radius: 20px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.05);
+    }
+
+    .gift-message {
+      display: none;
+      margin-top: 30px;
+      font-size: 20px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>ของขวัญพิเศษสำหรับคุณ 🎁</h1>
+
+  <div class="gift-box" onclick="openGift()">
+    👉 คลิกเพื่อเปิดของขวัญ 👈
+  </div>
+
+  <div class="gift-message" id="giftMessage">
+    🎉 ฉันเตรียมสิ่งพิเศษไว้ให้คุณ ลองเปิดไฟล์เสียง หรือดูรูป surprise ในกล่องข้าง ๆ เลยนะ!
+  </div>
+
+  <script>
+    function openGift() {
+      document.getElementById("giftMessage").style.display = "block";
+    }
+  </script>
+</body>
+</html>
